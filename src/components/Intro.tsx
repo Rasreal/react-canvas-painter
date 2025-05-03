@@ -25,6 +25,9 @@ export const Intro: React.FC<Props> = ({ init, isReady }) => {
           Created by <strong>Adrian Bece</strong>
         </p>
         <p>
+          Supported by <strong>Yersultan Tursyn</strong>
+        </p>
+        <p>
           <a
             href="https://codeadrian.hashnode.dev/"
             target="_blank"

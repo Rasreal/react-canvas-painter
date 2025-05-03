@@ -1,10 +1,14 @@
 :root {
-  --font-size-base: 18px;
+  --font-size-base: 18px;  
+  /* 1 rem = 18px */
   --line-height-base: 1.5;
 
   --color-text: #1d1d1d;
   --color-background: #ffffff;
+
 }
+
+
 
 html {
   box-sizing: border-box;
@@ -157,7 +161,7 @@ h1 {
   border: none;
   cursor: pointer;
   border-radius: 3rem;
-  animation: colorShift 13s ease infinite forwards;
+  animation: colorShift 15s ease-in-out infinite forwards;
   box-shadow: 0 0px 15px currentColor;
   margin-bottom: 3rem;
   display: inline-flex;
@@ -192,7 +196,7 @@ h1 {
   border-radius: 30px;
 }
 .blob-btn:hover .blob-text {
-  color: #ffffff;
+  color: #000000;
   border-radius: 30px;
 }
 .blob-btn:hover:after {
