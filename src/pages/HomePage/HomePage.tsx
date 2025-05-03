@@ -1,28 +1,29 @@
-import { useCallback, useState } from "react";
+
 import { usePainter } from "@/hooks/usePainter";
 import { Intro } from "@/components/Intro";
-import { Toolbar } from "@/components/Toolbar";
-import { Canvas } from "@/components/Canvas";
-import { Goo } from "@/components/Goo";
+import { useNavigate } from "react-router-dom";
+import {motion} from "framer-motion";
 
 const Home = () => {
-    const [dateUrl, setDataUrl] = useState("#");
+
     const [{ canvas, isReady, ...state }, { init, ...api }] = usePainter();
-  
-    const handleDownload = useCallback(() => {
-      if (!canvas || !canvas.current) return;
-      setDataUrl(canvas.current.toDataURL("image/png"));
-    }, [canvas]);
-  
-    const toolbarProps = { ...state, ...api, dateUrl, handleDownload };
-  
+    const navigate = useNavigate();
+
+
+    const navigateToPaint = () => {
+        navigate('/paint')
+    }
+
+
     return (
-      <>
-        <Intro isReady={isReady} init={init} />
-        <Toolbar {...toolbarProps} />
-        <Canvas width={state.currentWidth} canvasRef={canvas} />
-        <Goo />
-      </>
+      <motion.div 
+      initial={{ opacity: 0, x: -50 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 50 }}
+      transition={{ duration: 0.3 }}
+      >
+        <Intro isReady={isReady} init={navigateToPaint} />
+      </motion.div>
     );
   };
 
