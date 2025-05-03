@@ -1,11 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Canvas } from "./components/Canvas";
-import { Goo } from "./components/Goo";
-import { Intro } from "./components/Intro";
-import { Toolbar } from "./components/Toolbar";
-import { usePainter } from "./hooks/usePainter";
-import Home from "@/pages/HomePage/HomePage";
+
+import Home from "./pages/HomePage/HomePage";
 
 
 
