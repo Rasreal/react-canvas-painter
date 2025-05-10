@@ -27,12 +27,9 @@ export const usePainter = () => {
 
 
     const history = useRef<ImageData[]>([]);
-
     const snapshotSavedCurrentStroke = useRef(false);
-
-
-
-
+    const textMode = useRef(false);
+    const currentText = useRef("");
 
     const resizeCanvas = useCallback(() => {
         if (!canvas.current || !ctx.current) return;
@@ -206,6 +203,24 @@ export const usePainter = () => {
         }
     }, [drawNormal, handleMouseDown, stopDrawing]);
 
+
+    const handleTextAdd = useCallback((e: MouseEvent) => {
+        if (!textMode.current || !ctx.current || !canvas.current) return;
+
+
+        const rect = canvas.current.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+
+        ctx.current.fillStyle = currentColor;
+        ctx.current.font = `${ctx.current.lineWidth*2}px Arial`;
+        ctx.current.fillText(currentText.current, x, y);
+
+
+
+
+    }, [currentColor])
     const handleRegularMode = useCallback(() => {
         setIsRegularMode(true);
         isEraserMode.current = false;
@@ -309,7 +324,8 @@ export const usePainter = () => {
             setCurrentSaturation,
             setCurrentLightness,
             handleUndo,
-            resizeCanvas
+            resizeCanvas,
+            handleTextAdd,
         },
     ] as any;
 };
