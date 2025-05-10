@@ -22,7 +22,14 @@ const Paint = () => {
     }, [canvas]);
   
     const toolbarProps = { ...state, ...api, dateUrl, handleDownload };
-  
+
+    // useEffect(() => {
+    //     window.addEventListener("resize", api.resizeCanvas);
+    //     return () => window.removeEventListener("resize", api.resizeCanvas);
+    // }, [api.resizeCanvas]);
+
+
+
     return (
  
         <>

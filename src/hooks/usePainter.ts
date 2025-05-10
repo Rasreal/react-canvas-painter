@@ -30,6 +30,31 @@ export const usePainter = () => {
 
     const snapshotSavedCurrentStroke = useRef(false);
 
+
+
+
+
+    const resizeCanvas = useCallback(() => {
+        if (!canvas.current || !ctx.current) return;
+
+        const dpr = window.devicePixelRatio || 1;
+
+        // Clamp CSS size to max 2000x2000
+        const cssWidth = Math.min(window.innerWidth, 2000);
+        const cssHeight = Math.min(window.innerHeight, 2000);
+
+        // Set actual pixel resolution (canvas internal size)
+        canvas.current.width = cssWidth * dpr * 0.95;
+        canvas.current.height = cssHeight * dpr;
+
+        canvas.current.style.width = `${cssWidth * 0.95}px`;
+        canvas.current.style.height = `${cssHeight}px`;
+
+        ctx.current.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.current.scale(dpr, dpr);
+    }, []);
+
+
     const drawOnCanvas = useCallback((event: any) => {
         if (!ctx || !ctx.current) {
             return;
@@ -132,18 +157,27 @@ export const usePainter = () => {
     const init = useCallback(() => {
         ctx.current = canvas?.current?.getContext("2d");
         if (canvas && canvas.current && ctx && ctx.current) {
+
+
+            // resizeCanvas();
+
             const dpr = window.devicePixelRatio || 1;
 
 
             // Set actual pixel size of canvas
             // Применить реальный масштаб холста
-            canvas.current.width = (window.innerWidth - 196) * dpr;
-            canvas.current.height = window.innerHeight * dpr;
+            // canvas.current.width = (window.innerWidth * 0.95) * dpr;
+            // canvas.current.height = window.innerHeight * dpr;
+            let wSize = 3456;
+            let hSize = 2234;
+
+            canvas.current.width = (wSize) * dpr;
+            canvas.current.height = hSize * dpr;
 
 
             // Set display size (CSS size)
-            canvas.current.style.width = `${window.innerWidth - 196}px`;
-            canvas.current.style.height = `${window.innerHeight}px`;
+            canvas.current.style.width = `${wSize}px`;
+            canvas.current.style.height = `${hSize}px`;
 
             // Scale drawing context
             //мсштаб девайс пиксель соотношение
@@ -205,11 +239,20 @@ export const usePainter = () => {
     }, []);
 
     const handleClear = useCallback(() => {
-        if (!ctx || !ctx.current || !canvas || !canvas.current) {
-            return;
-        }
-        ctx.current.clearRect(0, 0, canvas.current.width, canvas.current.height);
+        if (!ctx.current || !canvas.current) return;
+
+        const cssWidth = window.innerWidth - 196;
+        const cssHeight = window.innerHeight;
+
+        // Clear in CSS pixel coordinates, since ctx was scaled
+        ctx.current.clearRect(0, 0, cssWidth, cssHeight);
+
+        // Optional: reset undo history
+        history.current = [];
+        const blankSnapshot = ctx.current.getImageData(0, 0, canvas.current.width, canvas.current.height);
+        history.current.push(blankSnapshot);
     }, []);
+
 
     const handleEraserMode = (e: any) => {
         autoWidth.current = false;
@@ -265,7 +308,8 @@ export const usePainter = () => {
             setAutoWidth,
             setCurrentSaturation,
             setCurrentLightness,
-            handleUndo
+            handleUndo,
+            resizeCanvas
         },
     ] as any;
 };

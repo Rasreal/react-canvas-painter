@@ -58,8 +58,10 @@ aside {
   background-color: #f1f1f1;
   padding: 1.2em;
   display: flex;
+  position: fixed;
   flex-direction: column;
   overflow: auto;
+
 
   margin-bottom: 10rem;
 }
