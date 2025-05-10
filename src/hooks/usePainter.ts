@@ -25,6 +25,11 @@ export const usePainter = () => {
 
   const ctx = useRef(canvas?.current?.getContext("2d"));
 
+
+  const history = useRef<ImageData[]>([]);
+
+  const snapshotSavedCurrentStroke = useRef(false);
+
   const drawOnCanvas = useCallback((event: any) => {
     if (!ctx || !ctx.current) {
       return;
@@ -33,7 +38,6 @@ export const usePainter = () => {
     ctx.current.moveTo(lastX.current, lastY.current);
     ctx.current.lineTo(event.offsetX, event.offsetY);
     ctx.current.stroke();
-
     [lastX.current, lastY.current] = [event.offsetX, event.offsetY];
   }, []);
 
@@ -56,7 +60,6 @@ export const usePainter = () => {
   const drawNormal = useCallback(
     (e: any) => {
       if (!isDrawing.current || !ctx.current) return;
-
       if (isRegularPaintMode.current || isEraserMode.current) {
         ctx.current.strokeStyle = selectedColor.current;
 
@@ -84,13 +87,29 @@ export const usePainter = () => {
           ? dynamicLineWidth()
           : (ctx.current.lineWidth = selectedLineWidth.current);
       }
+
+      //если снапшот не сохранен в истории, сохраняем его до момента рисовки на канвасе
+      if (!snapshotSavedCurrentStroke.current){
+        const snapshot = ctx.current.getImageData(
+            0, 0, canvas!.current!.width, canvas!.current!.height,
+        );
+
+        history.current.push(snapshot);
+
+        //console.log("history", history.current);
+        snapshotSavedCurrentStroke.current = true;
+      }
       drawOnCanvas(e);
     },
     [drawOnCanvas, dynamicLineWidth],
   );
 
   const stopDrawing = useCallback(() => {
+
+    if(!canvas.current || !ctx.current) return;
     isDrawing.current = false;
+    snapshotSavedCurrentStroke.current = false;
+
   }, []);
 
   const init = useCallback(() => {
@@ -108,7 +127,14 @@ export const usePainter = () => {
       ctx.current.lineJoin = "round";
       ctx.current.lineCap = "round";
       ctx.current.lineWidth = 10;
+
+      const blankSnapsht = ctx.current.getImageData(0, 0, canvas.current.width, canvas.current.height);
+
+      history.current.push(blankSnapsht);
+
       setIsReady(true);
+
+
     }
   }, [drawNormal, handleMouseDown, stopDrawing]);
 
@@ -135,6 +161,14 @@ export const usePainter = () => {
     setCurrentWidth(e.currentTarget.value);
     selectedLineWidth.current = e.currentTarget.value;
   };
+
+  const handleUndo = useCallback((e:any) => {
+    if(!ctx.current || history.current.length === 0 || !canvas.current) return;
+    console.log("222", history)
+    const previousState = history.current.pop();
+
+    ctx.current.putImageData(previousState!, 0, 0);
+  }, []);
 
   const handleClear = useCallback(() => {
     if (!ctx || !ctx.current || !canvas || !canvas.current) {
@@ -197,6 +231,7 @@ export const usePainter = () => {
       setAutoWidth,
       setCurrentSaturation,
       setCurrentLightness,
+      handleUndo
     },
   ] as any;
 };
