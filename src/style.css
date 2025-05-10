@@ -60,6 +60,8 @@ aside {
   display: flex;
   flex-direction: column;
   overflow: auto;
+
+  margin-bottom: 10rem;
 }
 
 aside > div:first-of-type {
@@ -359,6 +361,13 @@ h1 {
   width: 100%;
   height: 100%;
   padding: 0.25em 0.3em;
+  margin-bottom: 10px;
+}
+
+.btn--undo {
+  background-color: #d26969;
+
+  margin-bottom: 10px;
 }
 
 .tool-grid {
