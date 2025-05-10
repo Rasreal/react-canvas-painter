@@ -38,6 +38,10 @@ main {
   height: 100%;
 }
 
+canvas {
+  border: 1px dashed purple;
+}
+
 section {
   flex-grow: 1;
   height: 100%;
