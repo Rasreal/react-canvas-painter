@@ -132,18 +132,35 @@ export const usePainter = () => {
     const init = useCallback(() => {
         ctx.current = canvas?.current?.getContext("2d");
         if (canvas && canvas.current && ctx && ctx.current) {
-            canvas.current.addEventListener("mousedown", handleMouseDown);
-            canvas.current.addEventListener("mousemove", drawNormal);
-            canvas.current.addEventListener("mouseup", stopDrawing);
-            canvas.current.addEventListener("mouseout", stopDrawing);
+            const dpr = window.devicePixelRatio || 1;
 
-            canvas.current.width = window.innerWidth - 196;
-            canvas.current.height = window.innerHeight;
+
+            // Set actual pixel size of canvas
+            // Применить реальный масштаб холста
+            canvas.current.width = (window.innerWidth - 196) * dpr;
+            canvas.current.height = window.innerHeight * dpr;
+
+
+            // Set display size (CSS size)
+            canvas.current.style.width = `${window.innerWidth - 196}px`;
+            canvas.current.style.height = `${window.innerHeight}px`;
+
+            // Scale drawing context
+            //мсштаб девайс пиксель соотношение
+            ctx.current.scale(dpr, dpr);
+
 
             ctx.current.strokeStyle = "#000";
             ctx.current.lineJoin = "round";
             ctx.current.lineCap = "round";
             ctx.current.lineWidth = 10;
+
+            canvas.current.addEventListener("mousedown", handleMouseDown);
+            canvas.current.addEventListener("mousemove", drawNormal);
+            canvas.current.addEventListener("mouseup", stopDrawing);
+            canvas.current.addEventListener("mouseout", stopDrawing);
+
+
 
             const blankSnapsht = ctx.current.getImageData(0, 0, canvas.current.width, canvas.current.height);
 
