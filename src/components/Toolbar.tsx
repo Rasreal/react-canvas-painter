@@ -1,7 +1,8 @@
-import {faArrowsAltH, faEraser, faMagic, faPaintBrush,} from "@fortawesome/free-solid-svg-icons";
+import {faArrowsAltH, faEraser, faMagic, faPaintBrush, faPen} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import React from "react";
 import {BrushPreview} from "./BrushPreview";
+import {useTextMode} from "@/context/TextModeContext";
 
 export const Toolbar: React.FC<any> = ({
                                            currentWidth,
@@ -22,6 +23,13 @@ export const Toolbar: React.FC<any> = ({
                                            isAutoWidth,
                                            isEraser,
                                        }) => {
+
+    const {isTextMode, enableTextMode, disableTextMode} = useTextMode();
+
+    const handleTextToggle = () => {
+        isTextMode ? disableTextMode() : enableTextMode();
+    };
+
     return (
         <aside>
             <div>
@@ -69,6 +77,16 @@ export const Toolbar: React.FC<any> = ({
                     <div>
                         <button
                             className={`btn btn--tool ${
+                                isTextMode ? "btn--pen-active" : ""
+                            }`}
+                            onClick={handleTextToggle}
+                        >
+                            <FontAwesomeIcon icon={faPen} />
+                        </button>
+                    </div>
+                    <div>
+                        <button
+                            className={`btn btn--tool ${
                                 isEraser ? "btn--eraser-active" : ""
                             }`}
                             onClick={handleEraserMode}
@@ -103,7 +121,7 @@ export const Toolbar: React.FC<any> = ({
                             </small>
                         </div>
                         <div className="tool-section">
-                            <input
+                        <input
                                 defaultValue="50"
                                 type="range"
                                 min="10"

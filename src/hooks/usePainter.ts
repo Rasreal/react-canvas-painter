@@ -151,6 +151,34 @@ export const usePainter = () => {
 
     }, []);
 
+    const commitText = useCallback((text: string, x: number, y: number) => {
+        console.log("Draw text:", text, "at", x, y);
+
+
+        console.log(ctx.current);
+        console.log(canvas.current);
+
+
+        if (!ctx.current || !canvas.current) return;
+
+
+
+
+        ctx.current.fillStyle = currentColor;
+        ctx.current.font = `${ctx.current.lineWidth * 2}px sans-serif`;
+        ctx.current.fillText(text, x, y);
+
+        // Save to history for undo
+        const snapshot = ctx.current.getImageData(
+            0,
+            0,
+            canvas.current.width,
+            canvas.current.height
+        );
+        history.current.push(snapshot);
+    }, [currentColor]);
+
+
     const init = useCallback(() => {
         ctx.current = canvas?.current?.getContext("2d");
         if (canvas && canvas.current && ctx && ctx.current) {
@@ -204,23 +232,26 @@ export const usePainter = () => {
     }, [drawNormal, handleMouseDown, stopDrawing]);
 
 
-    const handleTextAdd = useCallback((e: MouseEvent) => {
-        if (!textMode.current || !ctx.current || !canvas.current) return;
+    // const handleTextAdd = useCallback((e: MouseEvent) => {
+    //     if (!textMode.current || !ctx.current || !canvas.current) return;
+    //
+    //
+    //     const rect = canvas.current.getBoundingClientRect();
+    //     const x = e.clientX - rect.left;
+    //     const y = e.clientY - rect.top;
+    //
+    //
+    //     ctx.current.fillStyle = currentColor;
+    //     ctx.current.font = `${ctx.current.lineWidth*2}px Arial`;
+    //     ctx.current.fillText(currentText.current, x, y);
+    //
+    //
+    //     const snapshot = ctx.current.getImageData(0, 0, canvas.current.width, canvas.current.height);
+    //     history.current.push(snapshot);
+    //
+    // }, [currentColor])
 
 
-        const rect = canvas.current.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
-
-        ctx.current.fillStyle = currentColor;
-        ctx.current.font = `${ctx.current.lineWidth*2}px Arial`;
-        ctx.current.fillText(currentText.current, x, y);
-
-
-
-
-    }, [currentColor])
     const handleRegularMode = useCallback(() => {
         setIsRegularMode(true);
         isEraserMode.current = false;
@@ -325,7 +356,7 @@ export const usePainter = () => {
             setCurrentLightness,
             handleUndo,
             resizeCanvas,
-            handleTextAdd,
+            commitText
         },
     ] as any;
 };

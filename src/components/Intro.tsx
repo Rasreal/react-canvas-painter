@@ -31,19 +31,11 @@ export const Intro: React.FC<Props> = ({ init, isReady }) => {
         </p>
         <p>
           <a
-            href="https://codeadrian.hashnode.dev/"
+            href="https://www.linkedin.com/in/uersultan/"
             target="_blank"
             rel="noopener noreferrer"
           >
-            Hashnode
-          </a>{" "}
-          |
-          <a
-            href="https://twitter.com/AdrianBeceDev"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Twitter
+            Linkedin
           </a>{" "}
           |
           <a
@@ -51,15 +43,15 @@ export const Intro: React.FC<Props> = ({ init, isReady }) => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Support my work
+            Support Author's work
           </a>
           |
           <a
-            href="https://codeadrian.github.io"
+            href="https://uers-portfolio.netlify.app/"
             target="_blank"
             rel="noopener noreferrer"
           >
-            Personal website
+            My Personal website
           </a>
         </p>
       </div>

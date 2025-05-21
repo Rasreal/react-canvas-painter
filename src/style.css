@@ -62,7 +62,8 @@ aside {
   background-color: #f1f1f1;
   padding: 1.2em;
   display: flex;
-  position: fixed;
+  position: absolute;
+  z-index: 9999;
   flex-direction: column;
   overflow: auto;
 
@@ -430,6 +431,10 @@ input[type="checkbox"] {
     hsl(320, 100%, 70%),
     hsl(0, 100%, 70%)
   );
+}
+
+.btn--pen-active {
+  background-color: hsl(256, 100%, 62%);
 }
 
 .btn--eraser-active {
